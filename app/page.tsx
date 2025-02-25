@@ -1,4 +1,4 @@
-// import { Contact } from "@/components/Contact";
+import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { KeyMetrics } from "@/components/KeyMetrics";
@@ -18,7 +18,7 @@ export default function Home() {
         <Portfolio/>
         <KeyMetrics/>
         <Todo/>
-        {/* <Contact/> */}
+        <Contact/>
         <Footer/>   
     </>  
     );

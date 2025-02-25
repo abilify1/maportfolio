@@ -11,34 +11,22 @@ const todos = [
     },
     { 
         id: '02', 
-        title: 'Implement Dark Mode', 
-        description: 'Add a dark/light theme toggle for better user experience.',
-        status: 'in-progress'
-    },
-    { 
-        id: '03', 
         title: 'Create Project Details Pages', 
         description: 'Add dedicated pages for each project with detailed information and live demos.',
         status: 'planned'
     },
     { 
-        id: '04', 
+        id: '03', 
         title: 'Add Search Functionality', 
         description: 'Implement search feature to easily find projects and blog posts.',
         status: 'planned'
     },
     { 
-        id: '05', 
+        id: '04', 
         title: 'Optimize Performance', 
         description: 'Improve website loading speed and optimize images.',
         status: 'planned'
     },
-    { 
-        id: '06', 
-        title: 'Add Contact Form', 
-        description: 'Implement a working contact form with email notification.',
-        status: 'planned'
-    }
 ];
 
 interface BackgroundCircle {

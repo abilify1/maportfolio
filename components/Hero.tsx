@@ -60,6 +60,7 @@ export const Hero = () => {
                             scale: 0.985
                         }}
                         className="flex w-fit items-center gap-2 rounded-full px-4 py-2"
+                        onClick={() => window.open("https://github.com/abilify1", "_blank")}
                     >
                        View Projects
                         <FiArrowRight />
