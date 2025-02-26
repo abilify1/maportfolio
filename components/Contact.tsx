@@ -3,17 +3,111 @@ import { useState } from "react";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
+interface FormState {
+  isSubmitting: boolean;
+  isSuccess: boolean;
+  error: string | null;
+}
+
 export const Contact = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [formState, setFormState] = useState<FormState>({
+    isSubmitting: false,
+    isSuccess: false,
+    error: null,
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log(formData);
+    
+    // Validate form data before sending
+    if (!formData.name || formData.name.length < 2) {
+      setFormState({
+        isSubmitting: false,
+        isSuccess: false,
+        error: "Name must be at least 2 characters"
+      });
+      return;
+    }
+
+    if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setFormState({
+        isSubmitting: false,
+        isSuccess: false,
+        error: "Please enter a valid email address"
+      });
+      return;
+    }
+
+    if (!formData.message || formData.message.length < 10) {
+      setFormState({
+        isSubmitting: false,
+        isSuccess: false,
+        error: "Message must be at least 10 characters"
+      });
+      return;
+    }
+
+    setFormState({
+      isSubmitting: true,
+      isSuccess: false,
+      error: null,
+    });
+
+    try {
+      console.log('Sending form data:', formData); // Debug log
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      console.log('Server response:', data); // Debug log
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to send message');
+      }
+
+      setFormState({
+        isSubmitting: false,
+        isSuccess: true,
+        error: null,
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setFormState(prev => ({ ...prev, isSuccess: false }));
+      }, 5000);
+
+    } catch (error) {
+      console.error('Form submission error:', error); // Debug log
+      setFormState({
+        isSubmitting: false,
+        isSuccess: false,
+        error: error instanceof Error ? error.message : 'Failed to send message',
+      });
+    }
   };
 
   const handleChange = (
@@ -26,35 +120,13 @@ export const Contact = () => {
     }));
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 }
-    }
-  };
-
   return (
     <section id="contact" className="relative py-16 bg-[#0a0a0a]">
       <div className="container mx-auto px-4 relative z-10">
         <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={containerVariants}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
           <h2 className="text-4xl font-bold text-[#ededed] mb-4">Get In Touch</h2>
@@ -65,14 +137,13 @@ export const Contact = () => {
 
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
           <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
             className="bg-[#0a0a0a]/50 backdrop-blur-sm p-8 rounded-lg border border-[#ededed]/10 shadow-xl"
           >
             <form onSubmit={handleSubmit}>
-              <motion.div variants={itemVariants} className="mb-6">
+              <div className="mb-6">
                 <label
                   htmlFor="name"
                   className="block text-[#ededed] text-sm font-medium mb-2"
@@ -90,9 +161,10 @@ export const Contact = () => {
                            focus:ring-2 focus:ring-[#4169e1]/50 focus:border-transparent
                            backdrop-blur-sm transition-all duration-300"
                   required
+                  disabled={formState.isSubmitting}
                 />
-              </motion.div>
-              <motion.div variants={itemVariants} className="mb-6">
+              </div>
+              <div className="mb-6">
                 <label
                   htmlFor="email"
                   className="block text-[#ededed] text-sm font-medium mb-2"
@@ -110,9 +182,10 @@ export const Contact = () => {
                            focus:ring-2 focus:ring-[#4169e1]/50 focus:border-transparent
                            backdrop-blur-sm transition-all duration-300"
                   required
+                  disabled={formState.isSubmitting}
                 />
-              </motion.div>
-              <motion.div variants={itemVariants} className="mb-6">
+              </div>
+              <div className="mb-6">
                 <label
                   htmlFor="message"
                   className="block text-[#ededed] text-sm font-medium mb-2"
@@ -130,27 +203,49 @@ export const Contact = () => {
                            focus:ring-2 focus:ring-[#4169e1]/50 focus:border-transparent
                            backdrop-blur-sm transition-all duration-300"
                   required
+                  disabled={formState.isSubmitting}
                 ></textarea>
-              </motion.div>
+              </div>
+
+              {formState.error && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500"
+                >
+                  {formState.error}
+                </motion.div>
+              )}
+
+              {formState.isSuccess && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-500"
+                >
+                  Message sent successfully! I'll get back to you soon.
+                </motion.div>
+              )}
+
               <motion.button
-                variants={itemVariants}
+                type="submit"
+                disabled={formState.isSubmitting}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                type="submit"
-                className="w-full bg-[#4169e1]/80 text-[#ededed] py-3 px-6 rounded-lg 
+                className={`w-full bg-[#4169e1]/80 text-[#ededed] py-3 px-6 rounded-lg 
                          hover:bg-[#4169e1] transition-all duration-300
-                         backdrop-blur-sm"
+                         backdrop-blur-sm disabled:opacity-50 disabled:cursor-not-allowed
+                         ${formState.isSubmitting ? 'animate-pulse' : ''}`}
               >
-                Send Message
+                {formState.isSubmitting ? 'Sending...' : 'Send Message'}
               </motion.button>
             </form>
           </motion.div>
 
           <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
             className="bg-[#0a0a0a]/50 backdrop-blur-sm p-8 rounded-lg border border-[#ededed]/10 shadow-xl"
           >
             <h3 className="text-2xl font-semibold text-[#ededed] mb-6">
@@ -158,7 +253,7 @@ export const Contact = () => {
             </h3>
             <div className="space-y-6">
               <motion.div 
-                variants={itemVariants}
+                whileHover={{ x: 5 }}
                 className="flex items-center space-x-4 group"
               >
                 <FaEnvelope className="text-2xl text-[#4169e1] group-hover:text-[#ededed] transition-colors duration-300" />
@@ -166,11 +261,11 @@ export const Contact = () => {
                   href="mailto:abilify1@proton.me"
                   className="text-[#ededed]/80 hover:text-[#ededed] transition-all duration-300"
                 >
-                  abilify@proton.me
+                  abilify1@proton.me
                 </a>
               </motion.div>
               <motion.div 
-                variants={itemVariants}
+                whileHover={{ x: 5 }}
                 className="flex items-center space-x-4 group"
               >
                 <FaGithub className="text-2xl text-[#4169e1] group-hover:text-[#ededed] transition-colors duration-300" />
@@ -183,7 +278,20 @@ export const Contact = () => {
                   GitHub
                 </a>
               </motion.div>
-              
+              <motion.div 
+                whileHover={{ x: 5 }}
+                className="flex items-center space-x-4 group"
+              >
+                <FaLinkedin className="text-2xl text-[#4169e1] group-hover:text-[#ededed] transition-colors duration-300" />
+                <a
+                  href="https://linkedin.com/in/yourusername"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#ededed]/80 hover:text-[#ededed] transition-all duration-300"
+                >
+                  LinkedIn
+                </a>
+              </motion.div>
             </div>
           </motion.div>
         </div>
