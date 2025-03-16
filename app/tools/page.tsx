@@ -115,7 +115,7 @@ export default function Tools() {
     ];
 
     return (
-        <main className="min-h-screen bg-[#0a0a0a] text-white pt-32">
+        <main className="min-h-screen bg-[#0a0a0a] text-white pt-20">
             <motion.div 
                 initial="hidden"
                 animate="visible"

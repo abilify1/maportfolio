@@ -109,12 +109,12 @@ export default function ObjectDetectionPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white pt-32 pb-16">
+    <main className="min-h-screen bg-[#0a0a0a] text-white pt-20 sm:pt-32 pb-16">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <Link 
             href="/tools" 
-            className="inline-flex items-center text-gray-400 hover:text-white transition-colors"
+            className="inline-flex items-center text-gray-400 hover:text-white transition-colors text-sm sm:text-base"
           >
             <FiArrowLeft className="mr-2" />
             Back to Tools
@@ -125,10 +125,10 @@ export default function ObjectDetectionPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <h1 className="text-4xl font-bold mb-4">Object <span className="text-gray-400">Detection</span></h1>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">Object <span className="text-gray-400">Detection</span></h1>
+          <p className="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base px-4">
             Detect and identify objects in images using AI-powered computer vision.
           </p>
         </motion.div>
@@ -137,27 +137,27 @@ export default function ObjectDetectionPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-4xl mx-auto bg-gray-800/50 rounded-lg p-8 border border-gray-700/50"
+          className="max-w-4xl mx-auto bg-gray-800/50 rounded-lg p-4 sm:p-8 border border-gray-700/50"
         >
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-300 mb-2">
               Image URL
             </label>
-            <div className="flex">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
               <input
                 type="text"
                 id="imageUrl"
                 value={imageUrl}
                 onChange={handleUrlChange}
                 placeholder="https://example.com/image.jpg"
-                className="flex-grow px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-l-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 sm:px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-md sm:rounded-l-md sm:rounded-r-none text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={detectObjects}
                 disabled={isLoading}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-r-md text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-md sm:rounded-l-none sm:rounded-r-md text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               >
                 {isLoading ? 'Detecting...' : 'Detect'}
               </motion.button>
@@ -181,13 +181,13 @@ export default function ObjectDetectionPage() {
                 <div className="flex space-x-2">
                   <button
                     onClick={() => setSelectedProvider('amazon')}
-                    className={`px-4 py-2 rounded-md text-sm transition-colors ${selectedProvider === 'amazon' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+                    className={`px-3 sm:px-4 py-2 rounded-md text-sm transition-colors ${selectedProvider === 'amazon' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
                   >
                     Amazon
                   </button>
                   <button
                     onClick={() => setSelectedProvider('google')}
-                    className={`px-4 py-2 rounded-md text-sm transition-colors ${selectedProvider === 'google' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+                    className={`px-3 sm:px-4 py-2 rounded-md text-sm transition-colors ${selectedProvider === 'google' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
                   >
                     Google
                   </button>
@@ -210,7 +210,7 @@ export default function ObjectDetectionPage() {
               
               <div>
                 <h3 className="text-lg font-medium mb-3">Detected Objects:</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                   {detectionResults[selectedProvider]?.items?.map((object, index) => (
                     <div key={index} className="bg-gray-700/50 p-3 rounded-md">
                       <div className="flex justify-between items-center">
