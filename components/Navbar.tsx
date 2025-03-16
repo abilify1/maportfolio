@@ -9,6 +9,7 @@ const navLinks = [
   { title: "About", path: "#about" },
   { title: "Portfolio", path: "#portfolio" },
   { title: "Stack", path: "#stack" },
+  { title: "Tools", path: "/tools" },
   { title: "Contact", path: "#contact" },
 ];
 
@@ -73,11 +74,11 @@ export const Navbar = () => {
        >
         <div className={`
             ${scrolled ? 'bg-[#0a0a0a]/80 shadow-lg' : 'bg-transparent'} 
-            border border-[#ededed]/10 mt-8 backdrop-blur-sm rounded-3xl 
-            hidden md:flex items-center justify-center p-2 max-w-[400px] mx-auto
+            border border-[#ededed]/10 mt-4 backdrop-blur-sm rounded-3xl 
+            hidden md:flex items-center justify-center p-2 max-w-[450px] mx-auto
             transition-all duration-300 ease-in-out
         `}>
-            <ul className="flex flex-row p-2 space-x-8">
+            <ul className="flex flex-row p-2 space-x-10 justify-center w-full">
                 {navLinks.map((link, index) => (
                     <motion.div
                         key={index}

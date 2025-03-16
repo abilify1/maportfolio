@@ -11,6 +11,7 @@
   "dependencies": {
     "@sentry/nextjs": "^9.3.0",
     "@types/nodemailer": "^6.4.17",
+    "axios": "^1.8.3",
     "framer-motion": "^11.11.11",
     "next": "15.0.2",
     "nodemailer": "^6.10.0",
